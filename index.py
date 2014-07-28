@@ -1,12 +1,19 @@
 import jinja2
+import sys, os
+sys.path.append(os.getcwd())
+import urls
+reload(urls)
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader(
  searchpath='templates/')
  )
-template = env.get_template('index.jinja')
+for templateName, url in urls.urls.iteritems():
+    template = env.get_template(templateName)
+    dispdict = {}
+    output = template.render(dispdict)
+    print output
+    print templateName, url
 
-dispdict = {}
-
-fout = open('index.html', 'w')
-fout.write(template.render(dispdict))
-fout.close()
+    fout = open(url, 'w')
+    fout.write(output)
+    fout.close()
